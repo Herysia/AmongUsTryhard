@@ -40,11 +40,13 @@ If you want to disable it, you can temporarily rename or remove the file `Among 
 
 If you want to completely uninstall Reactor/BepInEx, remove the following files and folders
 
+```
 +-- BepInEx
 +-- mono
 +-- changelog.txt
 +-- doorstop_config.ini
 +-- winhttp.dll
+```
 
 # Contributing
 
