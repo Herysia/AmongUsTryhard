@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Linq;
+using Hazel;
 using UnityEngine;
 
 namespace AmongUsTryhard.Patches
@@ -150,14 +151,20 @@ namespace AmongUsTryhard.Patches
             }
         }
 
-        [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Begin))]
-        public static class ShipStatusBegin
+        [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.HandleMessage))]
+        public static class InnerNetClientHandleMessage
         {
-            public static void Postfix(ShipStatus __instance)
+            public static void Postfix(InnerNetClient __instance, MessageReader ALMCIJKELCP, SendOption GLLMNHCBIOC)
             {
+                MessageReader reader = ALMCIJKELCP;
+                if (reader.Tag != 2) return;
+
+
                 int playersLeft = PlayerControl.AllPlayerControls.ToArray().Count(pc =>
                     !pc.Data.IsDead && !pc.Data.Disconnected);
                 udpateBools(playersLeft);
+
+                System.Console.WriteLine(playersLeft);
             }
         }
     }
