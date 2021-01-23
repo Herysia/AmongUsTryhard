@@ -52,8 +52,6 @@ namespace AmongUsTryhard.Patches
                     return false;
                 }
 
-                __instance.timer = 0f;
-
                 //Toggle ON/OFF depending on minPlayerVitals parameter
                 if (!__instance.isSab &&
                     adminBool)
