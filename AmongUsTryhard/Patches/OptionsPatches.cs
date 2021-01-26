@@ -2,6 +2,7 @@
 using Hazel;
 using Il2CppSystem.IO;
 using System;
+using System.Linq;
 using Il2CppDumper;
 using UnhollowerBaseLib;
 using UnityEngine;
@@ -80,11 +81,19 @@ namespace AmongUsTryhard.Patches
                 }
             }
 
+            static float GetLowestConfigY(GameOptionsMenu __instance)
+            {
+                return __instance.GetComponentsInChildren<OptionBehaviour>()
+                    .Min(option => option.transform.localPosition.y);
+            }
+
             static void Postfix(ref GameOptionsMenu __instance)
             {
+                var lowestY = GetLowestConfigY(__instance);
+
                 var countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
                     __instance.transform);
-                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, -8.35f,
+                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, lowestY - 0.5f,
                     countOption.transform.localPosition.z);
                 countOption.Title = maxPlayerAdminTitle;
                 countOption.Value = maxPlayerAdmin;
@@ -96,7 +105,7 @@ namespace AmongUsTryhard.Patches
 
                 countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
                     __instance.transform);
-                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, -8.85f,
+                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, lowestY - 1.0f,
                     countOption.transform.localPosition.z);
                 countOption.Title = maxPlayerCamsTitle;
                 countOption.Value = maxPlayerCams;
@@ -108,7 +117,7 @@ namespace AmongUsTryhard.Patches
 
                 countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
                     __instance.transform);
-                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, -9.35f,
+                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, lowestY - 1.5f,
                     countOption.transform.localPosition.z);
                 countOption.Title = maxPlayerVitalsTitle;
                 countOption.Value = maxPlayerVitals;
