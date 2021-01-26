@@ -50,7 +50,7 @@ If you want to completely uninstall Reactor/BepInEx, remove the following files 
 
 # Contributing
 
-You have encountered a bug or unexpected behaviour ? You want to suggest or add a new feature ? Create an [Issue](https://github.com/Herysia/CustomKeyBinds/issues) or [PR](https://github.com/Herysia/CustomKeyBinds/pulls) !
+You have encountered a bug or unexpected behaviour ? You want to suggest or add a new feature ? Create an [Issue](https://github.com/Herysia/AmongUsTryhard/issues) or [PR](https://github.com/Herysia/AmongUsTryhard/pulls) !
 
 ### Creating PR
 
@@ -60,7 +60,7 @@ You have encountered a bug or unexpected behaviour ? You want to suggest or add 
 
 # Licensing & Credits
 
-CustomKeyBinds is licensed under the MIT License. See [LICENSE](LICENSE.md) for the full License.
+AmongUsTryhard is licensed under the MIT License. See [LICENSE](LICENSE.md) for the full License.
 
 Credits to [@Galster](https://github.com/Galster-dev) for custom lobby settings
 
