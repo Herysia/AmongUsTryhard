@@ -162,7 +162,6 @@ namespace AmongUsTryhard.Patches
                     !pc.Data.IsDead && !pc.Data.Disconnected);
                 udpateBools(playersLeft);
 
-                System.Console.WriteLine(playersLeft);
             }
         }
     }
