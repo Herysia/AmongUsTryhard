@@ -102,6 +102,8 @@ namespace AmongUsTryhard.Patches
                 countOption.TitleText.Text = str;
                 countOption.OnValueChanged = new Action<OptionBehaviour>(OnValueChanged);
                 countOption.gameObject.AddComponent<OptionBehaviour>();
+                countOption.ValidRange.max = 10;
+                countOption.ValidRange.min = 3;
 
                 countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
                     __instance.transform);
@@ -114,6 +116,8 @@ namespace AmongUsTryhard.Patches
                 countOption.TitleText.Text = str;
                 countOption.OnValueChanged = new Action<OptionBehaviour>(OnValueChanged);
                 countOption.gameObject.AddComponent<OptionBehaviour>();
+                countOption.ValidRange.max = 10;
+                countOption.ValidRange.min = 3;
 
                 countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
                     __instance.transform);
@@ -126,6 +130,8 @@ namespace AmongUsTryhard.Patches
                 countOption.TitleText.Text = str;
                 countOption.OnValueChanged = new Action<OptionBehaviour>(OnValueChanged);
                 countOption.gameObject.AddComponent<OptionBehaviour>();
+                countOption.ValidRange.max = 10;
+                countOption.ValidRange.min = 3;
 
                 __instance.GetComponentInParent<Scroller>().YBounds.max += 0.6f;
             }
