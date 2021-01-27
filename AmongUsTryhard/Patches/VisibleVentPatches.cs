@@ -1,10 +1,17 @@
 ﻿using HarmonyLib;
 using PowerTools;
+using UnityEngine;
 
 namespace AmongUsTryhard.Patches
 {
     internal class VisibleVentPatches
     {
+        public static int ShipAndObjectsMask = LayerMask.GetMask(new string[]
+        {
+            "Ship",
+            "Objects"
+        });
+
         //Method_1, Method_23, Method_38, Method_50
         [HarmonyPatch(typeof(Vent), nameof(Vent.Method_38))] //EnterVent
         public static class EnterVentPatch
@@ -17,8 +24,13 @@ namespace AmongUsTryhard.Patches
                     return false;
                 }
 
-                if (pc.AmOwner || (pc.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition()).magnitude <
-                    PlayerControl.LocalPlayer.myLight.LightRadius)
+                var truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+
+                Vector2 vector = pc.GetTruePosition() - truePosition;
+                var magnitude = vector.magnitude;
+                if (pc.AmOwner || magnitude < PlayerControl.LocalPlayer.myLight.LightRadius &&
+                    !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude,
+                        ShipAndObjectsMask))
                 {
                     __instance.GetComponent<SpriteAnim>().Play(__instance.EnterVentAnim, 1f);
                 }
@@ -45,8 +57,13 @@ namespace AmongUsTryhard.Patches
                     return false;
                 }
 
-                if (pc.AmOwner || (pc.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition()).magnitude <
-                    PlayerControl.LocalPlayer.myLight.LightRadius)
+                var truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+
+                Vector2 vector = pc.GetTruePosition() - truePosition;
+                var magnitude = vector.magnitude;
+                if (pc.AmOwner || magnitude < PlayerControl.LocalPlayer.myLight.LightRadius &&
+                    !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude,
+                        ShipAndObjectsMask))
                 {
                     __instance.GetComponent<SpriteAnim>().Play(__instance.ExitVentAnim, 1f);
                 }
