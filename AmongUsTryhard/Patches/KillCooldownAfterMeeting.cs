@@ -15,7 +15,7 @@ namespace AmongUsTryhard.Patches
             {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists || !ShipStatus.Instance.IsGameOverDueToDeath())
                 {
-                    PlayerControl.LocalPlayer.killTimer *= OptionsPatches.meetingKillCD / 100f;
+                    PlayerControl.LocalPlayer.killTimer *= CustomGameOptionsData.customGameOptions.meetingKillCD / 100f;
                 }
             }
         }

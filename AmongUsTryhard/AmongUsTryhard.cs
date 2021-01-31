@@ -12,7 +12,7 @@ namespace AmongUsTryhard
     public class AmongUsTryhard : BasePlugin
     {
         public const string Id = "com.herysia.amongustryhard";
-
+        public static byte rpcSettingsId = 60;
         public Harmony Harmony { get; } = new Harmony(Id);
 
         public override void Load()

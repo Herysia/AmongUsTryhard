@@ -133,9 +133,9 @@ namespace AmongUsTryhard.Patches
 
         static void udpateBools(int playersLeft)
         {
-            vitalsBool = playersLeft > OptionsPatches.maxPlayerVitals;
-            adminBool = playersLeft > OptionsPatches.maxPlayerAdmin;
-            camsBool = playersLeft > OptionsPatches.maxPlayerCams;
+            vitalsBool = playersLeft > CustomGameOptionsData.customGameOptions.maxPlayerVitals;
+            adminBool = playersLeft > CustomGameOptionsData.customGameOptions.maxPlayerAdmin;
+            camsBool = playersLeft > CustomGameOptionsData.customGameOptions.maxPlayerCams;
         }
 
         [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
