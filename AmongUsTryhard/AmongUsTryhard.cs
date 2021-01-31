@@ -15,14 +15,8 @@ namespace AmongUsTryhard
 
         public Harmony Harmony { get; } = new Harmony(Id);
 
-        public static ConfigEntry<byte> maxPlayerAdmin { get; private set; }
-        public static ConfigEntry<byte> maxPlayerCams { get; private set; }
-        public static ConfigEntry<byte> maxPlayerVitals { get; private set; }
         public override void Load()
         {
-            maxPlayerAdmin = Config.Bind("AmongUsTryhard", "maxPlayerAdmin", (byte)10);
-            maxPlayerCams = Config.Bind("AmongUsTryhard", "maxPlayerCams", (byte)10);
-            maxPlayerVitals = Config.Bind("AmongUsTryhard", "maxPlayerVitals", (byte)10);
 
             Harmony.PatchAll();
         }

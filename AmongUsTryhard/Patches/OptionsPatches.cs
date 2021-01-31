@@ -13,13 +13,17 @@ namespace AmongUsTryhard.Patches
     //Code from : https://github.com/Galster-dev/CrowdedSheriff/blob/master/src/OptionsPatches.cs <3
     internal class OptionsPatches
     {
-        public static byte maxPlayerAdmin = AmongUsTryhard.maxPlayerAdmin.Value;
-        public static byte maxPlayerCams = AmongUsTryhard.maxPlayerAdmin.Value;
-        public static byte maxPlayerVitals = AmongUsTryhard.maxPlayerAdmin.Value;
+        public static byte maxPlayerAdmin = 10;
+        public static byte maxPlayerCams = 10;
+        public static byte maxPlayerVitals = 10;
+        public static bool hideNames = false;
+        public static byte meetingKillCD = 100;
 
         const StringNames maxPlayerAdminTitle = (StringNames) 1337;
         const StringNames maxPlayerCamsTitle = (StringNames) 1338;
         const StringNames maxPlayerVitalsTitle = (StringNames) 1339;
+        const StringNames hideNamesTitle = (StringNames) 1340;
+        const StringNames meetingKillCDTitle = (StringNames) 1341;
 
         [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString),
             new Type[] {typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>)})]
@@ -37,6 +41,12 @@ namespace AmongUsTryhard.Patches
                         break;
                     case maxPlayerVitalsTitle:
                         __result = "Vitals max players";
+                        break;
+                    case hideNamesTitle:
+                        __result = "Hide names";
+                        break;
+                    case meetingKillCDTitle:
+                        __result = "Kill cooldown % after meeting";
                         break;
                     default:
                         return true;
@@ -56,15 +66,18 @@ namespace AmongUsTryhard.Patches
                 {
                     case maxPlayerAdminTitle:
                         maxPlayerAdmin = (byte) option.GetInt();
-                        AmongUsTryhard.maxPlayerAdmin.Value = maxPlayerAdmin;
                         break;
                     case maxPlayerCamsTitle:
                         maxPlayerCams = (byte) option.GetInt();
-                        AmongUsTryhard.maxPlayerCams.Value = maxPlayerCams;
                         break;
                     case maxPlayerVitalsTitle:
                         maxPlayerVitals = (byte) option.GetInt();
-                        AmongUsTryhard.maxPlayerVitals.Value = maxPlayerVitals;
+                        break;
+                    case hideNamesTitle:
+                        hideNames = option.GetBool();
+                        break;
+                    case meetingKillCDTitle:
+                        meetingKillCD = (byte)option.GetInt();
                         break;
                 }
 
@@ -87,9 +100,11 @@ namespace AmongUsTryhard.Patches
                     .Min(option => option.transform.localPosition.y);
             }
 
+            [HarmonyPriority(Priority.Normal - 1)]
             static void Postfix(ref GameOptionsMenu __instance)
             {
                 var lowestY = GetLowestConfigY(__instance);
+                //__instance.GetComponentsInChildren<NumberOption>().First(opt => opt.name == "Crewmate Vision").Increment = 0.05f;
 
                 var countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
                     __instance.transform);
@@ -133,7 +148,35 @@ namespace AmongUsTryhard.Patches
                 countOption.ValidRange.max = 10;
                 countOption.ValidRange.min = 3;
 
-                __instance.GetComponentInParent<Scroller>().YBounds.max += 0.6f;
+                var toggleOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<ToggleOption>()[1],
+                    __instance.transform);
+                toggleOption.transform.localPosition = new Vector3(toggleOption.transform.localPosition.x,
+                    lowestY - 2.0f, toggleOption.transform.localPosition.z);
+                toggleOption.Title = hideNamesTitle;
+                toggleOption.CheckMark.enabled = hideNames;
+                str = "";
+                TranslationController_GetString.Prefix(toggleOption.Title, ref str);
+                toggleOption.TitleText.Text = str;
+                toggleOption.OnValueChanged = new Action<OptionBehaviour>(OnValueChanged);
+                toggleOption.gameObject.AddComponent<OptionBehaviour>();
+
+                countOption = UnityEngine.Object.Instantiate(__instance.GetComponentsInChildren<NumberOption>()[1],
+                    __instance.transform);
+                countOption.transform.localPosition = new Vector3(countOption.transform.localPosition.x, lowestY - 2.5f,
+                    countOption.transform.localPosition.z);
+                countOption.Title = meetingKillCDTitle;
+                countOption.Value = meetingKillCD;
+                str = "";
+                TranslationController_GetString.Prefix(countOption.Title, ref str);
+                countOption.TitleText.Text = str;
+                countOption.OnValueChanged = new Action<OptionBehaviour>(OnValueChanged);
+                countOption.gameObject.AddComponent<OptionBehaviour>();
+                countOption.ValidRange.max = 200;
+                countOption.ValidRange.min = 10;
+                countOption.Increment = 10;
+                countOption.FormatString = "{0:0}%";
+
+                __instance.GetComponentInParent<Scroller>().YBounds.max += 2.5f;
             }
         }
 
@@ -143,6 +186,27 @@ namespace AmongUsTryhard.Patches
             static void Prefix(ref GameSettingMenu __instance)
             {
                 __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
+            }
+        }
+
+        [HarmonyPatch(typeof(ToggleOption), nameof(ToggleOption.OnEnable))]
+        static class ToggleOption_OnEnable
+        {
+            static bool Prefix(ref ToggleOption __instance)
+            {
+                if (__instance.Title == hideNamesTitle)
+                {
+                    string str = "";
+                    TranslationController_GetString.Prefix(__instance.Title, ref str);
+                    __instance.TitleText.Text = str;
+                    __instance.CheckMark.enabled = hideNames;
+                    __instance.OnValueChanged = new Action<OptionBehaviour>(GameOptionsMenu_Start.OnValueChanged);
+                    __instance.enabled = true;
+
+                    return false;
+                }
+
+                return true;
             }
         }
 
@@ -187,6 +251,18 @@ namespace AmongUsTryhard.Patches
                     return false;
                 }
 
+                if (__instance.Title == meetingKillCDTitle)
+                {
+                    string smh = "";
+                    TranslationController_GetString.Prefix(__instance.Title, ref smh);
+                    __instance.TitleText.Text = smh;
+                    __instance.OnValueChanged = new Action<OptionBehaviour>(GameOptionsMenu_Start.OnValueChanged);
+                    __instance.Value = meetingKillCD;
+                    __instance.enabled = true;
+
+                    return false;
+                }
+
                 return true;
             }
         }
@@ -194,14 +270,20 @@ namespace AmongUsTryhard.Patches
         [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.Method_24))]
         static class GameOptionsData_ToHudString
         {
+            [HarmonyPriority(Priority.Normal - 1)]
             static void Postfix(ref string __result)
             {
                 var builder = new System.Text.StringBuilder(__result);
                 builder.AppendLine();
-                builder.AppendLine($"Admin max players: {maxPlayerAdmin}");
-                builder.AppendLine($"Cams max players: {maxPlayerCams}");
-                builder.AppendLine($"Vitals max players: {maxPlayerVitals}");
+                builder.AppendLine($"Max players for: Admin={maxPlayerAdmin}, Cams={maxPlayerCams}, Vitals={maxPlayerVitals}");
+                builder.AppendLine($"Hide names: {hideNames}");
+                builder.Append("Kill cooldown after meeting: ");
+                builder.Append(meetingKillCD);
+                builder.Append("%");
+                builder.AppendLine();
                 __result = builder.ToString();
+
+                DestroyableSingleton<HudManager>.Instance.GameSettings.scale = 0.6f;
             }
         }
 
@@ -235,6 +317,23 @@ namespace AmongUsTryhard.Patches
                 catch
                 {
                     maxPlayerVitals = 10;
+                }
+                try
+                {
+                    hideNames = ALMCIJKELCP.ReadBoolean();
+                }
+                catch
+                {
+                    hideNames = false;
+                }
+
+                try
+                {
+                    meetingKillCD = ALMCIJKELCP.ReadByte();
+                }
+                catch
+                {
+                    meetingKillCD = 100;
                 }
             }
         }
@@ -270,6 +369,22 @@ namespace AmongUsTryhard.Patches
                 {
                     maxPlayerVitals = 10;
                 }
+                try
+                {
+                    hideNames = ALMCIJKELCP.ReadBoolean();
+                }
+                catch
+                {
+                    hideNames = false;
+                }
+                try
+                {
+                    meetingKillCD = ALMCIJKELCP.ReadByte();
+                }
+                catch
+                {
+                    meetingKillCD = 100;
+                }
             }
         }
 
@@ -282,6 +397,8 @@ namespace AmongUsTryhard.Patches
                 AGLJMGAODDG.Write(maxPlayerAdmin);
                 AGLJMGAODDG.Write(maxPlayerCams);
                 AGLJMGAODDG.Write(maxPlayerVitals);
+                AGLJMGAODDG.Write(hideNames);
+                AGLJMGAODDG.Write(meetingKillCD);
             }
         }
     }
