@@ -15,6 +15,10 @@
         <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\LobbyOptionsAPI\LobbyOptionsAPI\LobbyOptionsAPI.csproj" />
+    </ItemGroup>
+
     <Target Name="Copy" AfterTargets="Reobfuscate">
         <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
     </Target>

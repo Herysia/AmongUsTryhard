@@ -10,7 +10,7 @@ namespace AmongUsTryhard.Patches
     {
         public static void hideNames()
         {
-            if (!CustomGameOptionsData.customGameOptions.hideNames) return;
+            if (!CustomGameOptionsData.customGameOptions.hideNames.value) return;
             foreach (var player in PlayerControl.AllPlayerControls)
             {
                 if (player == PlayerControl.LocalPlayer) continue;
