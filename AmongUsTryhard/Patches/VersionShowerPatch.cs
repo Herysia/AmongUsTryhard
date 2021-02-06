@@ -33,7 +33,7 @@ namespace AmongUsTryhard.Patches
                 herysiaVersionShower.Text,
                 "\n",
                 "AmongUsTryhard",
-                " v1.5.0",
+                " v1.6.1",
                 " by Herysia#4293"
             });
         }
