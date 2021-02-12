@@ -7,6 +7,11 @@ Among us mod that fixes some game breaking bugs when tryharding among us. As wel
 -   Fixes admin table blink issue (https://youtu.be/aMEH0wGjyZ8)
 -   Fixes the fact that vent's animation is visible in the shadow (https://youtu.be/vL3xS9cFSPY)
 -   Allow you to disable Cameras, Admin table and Vitals when there are less than N players, updated at meetings (customizable)
+-   Crewmates can use scanner at the same time (prevent scan abuse)
+-   Fixes some cases when impostor is invisible after exiting a vent
+-   Removes the kill button blink when one of your teammates kills
+-   Option to hide player names (excluding yours and your impostor's teammates) to prevent wall/door clipping
+-   Option to change the % of kill cooldown after a meeting
 -   Allow you to change map and impostor count from the game lobby (Thx [@Galster](https://github.com/Galster-dev))
 
 <img src="./Visuals/Settings.png" alt="customSettings" width="700"/>
@@ -51,6 +56,10 @@ If you want to completely uninstall Reactor/BepInEx, remove the following files 
 # Contributing
 
 You have encountered a bug or unexpected behaviour ? You want to suggest or add a new feature ? Create an [Issue](https://github.com/Herysia/AmongUsTryhard/issues) or [PR](https://github.com/Herysia/AmongUsTryhard/pulls) !
+
+### Dependency
+
+This mod depends on [another module](https://github.com/Herysia/CustomLobbyOptions) which simplify lobby options (add to menu, sync settings and save settings individually with customisable display)
 
 ### Creating PR
 
