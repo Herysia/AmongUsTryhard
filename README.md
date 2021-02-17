@@ -12,6 +12,7 @@ Among us mod that fixes some game breaking bugs when tryharding among us. As wel
 -   Removes the kill button blink when one of your teammates kills
 -   Option to hide player names (excluding yours and your impostor's teammates) to prevent wall/door clipping
 -   Option to change the % of kill cooldown after a meeting
+-   Option to force wire task (it's still counted as a "common task")
 -   Allow you to change map and impostor count from the game lobby (Thx [@Galster](https://github.com/Galster-dev))
 
 <img src="./Visuals/Settings.png" alt="customSettings" width="700"/>

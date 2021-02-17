@@ -6,7 +6,7 @@ namespace AmongUsTryhard.Patches
 {
     public class CustomGameOptionsData : LobbyOptions
     {
-        private byte settingsVersion = 1;
+        private byte settingsVersion = 2;
         public static CustomGameOptionsData customGameOptions;
 
         public CustomGameOptionsData() : base(AmongUsTryhard.Id, AmongUsTryhard.rpcSettingsId)
@@ -16,6 +16,7 @@ namespace AmongUsTryhard.Patches
             maxPlayerVitals = AddOption(10, "Vitals max players", 0, 10);
             hideNames = AddOption(false, "Hide names");
             meetingKillCD = AddOption(10, "Kill cooldown after meeting", 10, 200, 10, "%");
+            wiresAlwaysON = AddOption(false, "Force wire task");
         }
 
         public CustomNumberOption maxPlayerAdmin;
@@ -23,6 +24,7 @@ namespace AmongUsTryhard.Patches
         public CustomNumberOption maxPlayerVitals;
         public CustomToggleOption hideNames;
         public CustomNumberOption meetingKillCD;
+        public CustomToggleOption wiresAlwaysON;
 
         public override void SetRecommendations()
         {
@@ -31,6 +33,7 @@ namespace AmongUsTryhard.Patches
             maxPlayerVitals.value = 10;
             hideNames.value = false;
             meetingKillCD.value = 100;
+            wiresAlwaysON.value = false;
         }
 
         public override void Serialize(BinaryWriter writer)
@@ -41,6 +44,7 @@ namespace AmongUsTryhard.Patches
             writer.Write((byte)maxPlayerVitals.value);
             writer.Write(hideNames.value);
             writer.Write((byte)meetingKillCD.value);
+            writer.Write(wiresAlwaysON.value);
         }
 
         public override void Deserialize(BinaryReader reader)
@@ -54,6 +58,10 @@ namespace AmongUsTryhard.Patches
                 maxPlayerVitals.value = reader.ReadByte();
                 hideNames.value = reader.ReadBoolean();
                 meetingKillCD.value = reader.ReadByte();
+                if (b >= 2)
+                {
+                    wiresAlwaysON.value = reader.ReadBoolean();
+                }
             }
             catch
             {
@@ -71,6 +79,10 @@ namespace AmongUsTryhard.Patches
                 maxPlayerVitals.value = reader.ReadByte();
                 hideNames.value = reader.ReadBoolean();
                 meetingKillCD.value = reader.ReadByte();
+                if (b >= 2)
+                {
+                    wiresAlwaysON.value = reader.ReadBoolean();
+                }
             }
             catch
             {
@@ -91,6 +103,7 @@ namespace AmongUsTryhard.Patches
                 settings.Append(meetingKillCD.value);
                 settings.Append("%");
                 settings.AppendLine();
+                settings.AppendLine($"Force wire task: {wiresAlwaysON.value}");
             }
             catch
             {
